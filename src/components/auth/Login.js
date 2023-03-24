@@ -1,8 +1,10 @@
 import React, { useContext, useRef, useState } from "react";
+import { useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./Login.module.css";
 
 const Login = () => {
+  const history = useHistory()
   const authCtx = useContext(AuthContext);
   const emailInputRef = useRef("");
   const passwordInputRef = useRef("");
@@ -57,6 +59,7 @@ const Login = () => {
       })
       .then((data) => {
         authCtx.login(data.idToken);
+        history.replace('/welcome')
         console.log(data.idToken);
       })
       .catch((err) => {
