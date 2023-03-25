@@ -2,6 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./Login.module.css";
+import {Link} from 'react-router-dom'
 
 const Login = () => {
   const history = useHistory()
@@ -94,6 +95,7 @@ const Login = () => {
             ref={conPasswordInputRef}
           />
         </div>
+        <Link to="/forgot">Forgot Password?</Link>
         <div className={classes.actions}>
           {!isLoading && (
             <button>{isLogin ? "Login" : "Create Account"}</button>

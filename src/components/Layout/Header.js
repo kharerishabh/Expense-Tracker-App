@@ -9,7 +9,18 @@ const Header = () => {
   }
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-dark">
+    {/* <Navbar bg="dark" variant="dark">
+        <Container>
+          <Navbar.Brand>Expense Tracker</Navbar.Brand>
+          <Nav className="me-auto">
+            <NavLink to="/home">Home</NavLink>
+            <NavLink to="/profile">Products</NavLink>
+            <NavLink >About Us</NavLink>
+          </Nav>
+        </Container> */}
+      {/* </Navbar> */}
+
+      <nav className="navbar navbar-expand-lg bg-light variant-dark">
         <div className="collapse navbar-collapse justify-content-between">
           <h2 className="bg-light">Expense Tracker</h2>
           <ul className="navbar-nav mx-auto p-2 ">
@@ -22,6 +33,7 @@ const Header = () => {
           </Button>}
         </div>
       </nav>
+      <hr/>
     </>
   );
 };
