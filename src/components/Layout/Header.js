@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import {Button} from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 const Header = () => {
   const authCtx = useContext(AuthContext)
@@ -12,7 +13,7 @@ const Header = () => {
         <div className="collapse navbar-collapse justify-content-between">
           <h2 className="bg-light">Expense Tracker</h2>
           <ul className="navbar-nav mx-auto ">
-            <li className="nav-item bg-light">Home</li>
+            <li className="nav-item bg-light"><Link to="/home">Home</Link></li>
             <li className="nav-item bg-light">Products</li>
             <li className="nav-item bg-light" >About Us</li>
           </ul>

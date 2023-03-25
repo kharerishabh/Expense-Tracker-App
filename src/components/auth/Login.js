@@ -59,7 +59,7 @@ const Login = () => {
       })
       .then((data) => {
         authCtx.login(data.idToken);
-        history.replace('/welcome')
+        history.replace('/home')
         console.log(data.idToken);
       })
       .catch((err) => {
