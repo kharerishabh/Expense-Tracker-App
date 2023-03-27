@@ -2,10 +2,10 @@ import React, { useContext, useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../../store/auth-context";
 import classes from "./Login.module.css";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 const Login = () => {
-  const history = useHistory()
+  const history = useHistory();
   const authCtx = useContext(AuthContext);
   const emailInputRef = useRef("");
   const passwordInputRef = useRef("");
@@ -17,56 +17,66 @@ const Login = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = async (event) => {
     event.preventDefault();
-
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
     const enteredConPassword = conPasswordInputRef.current.value;
-    setIsLoading(true);
-    let url;
-    if (isLogin) {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAeVuAP3AC60M5s9NgCzw8jFbPj8zKgv_E";
-      console.log('User has successfully Login')
-      } else {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAeVuAP3AC60M5s9NgCzw8jFbPj8zKgv_E";
-      console.log("User has successfully signed up");
+    if (!isLogin) {
+      if (enteredPassword !== enteredConPassword) {
+        return alert("Password and the confirm password is not same");
+      }
     }
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify({
-        email: enteredEmail,
-        password: enteredPassword,
-        conpassword: enteredConPassword,
-        returnSecureToken: true,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => {
-        setIsLoading(false);
-        if (res.ok) {
-          return res.json();
-        } else {
-          let errorMessage = "Authentication failed";
-          // if(data && data.error && data.error.message){
-          //   errorMessage = data.error.message
-          // }
-          throw new Error(errorMessage);
-        }
-      })
-      .then((data) => {
-        authCtx.login(data.idToken);
-        history.replace('/home')
-        console.log(data.idToken);
-      })
-      .catch((err) => {
-        alert(err.message);
-        console.log(err.message);
+    setIsLoading(true);
+    let url1;
+    if (isLogin) {
+      url1 =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAeVuAP3AC60M5s9NgCzw8jFbPj8zKgv_E";
+    } else {
+      url1 =
+        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAeVuAP3AC60M5s9NgCzw8jFbPj8zKgv_E";
+    }
+
+    try {
+      const res = await fetch(url1, {
+        method: "POST",
+        body: JSON.stringify({
+          email: enteredEmail,
+          password: enteredPassword,
+          returnSecureToken: true,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
+      if (res.ok) {
+        setIsLogin(true);
+        const data = await res.json();
+        const userEmailId = data.email;
+        const replaceEmailId = userEmailId.replace("@", "").replace(".", "");
+        authCtx.login(data.idToken);
+        localStorage.setItem("email", replaceEmailId);
+        console.log(replaceEmailId);
+        console.log(data.idToken);
+        emailInputRef.current.value = "";
+        passwordInputRef.current.value = "";
+
+        if (!isLogin) {
+          conPasswordInputRef.current.value = "";
+          alert("Signup successful");
+          history.replace("/home");
+        } else {
+          alert("Login Successful");
+          history.replace("/home");
+        }
+      } else {
+        setIsLoading(false)
+        const data = await res.json();
+        throw data.error;
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 
   return (

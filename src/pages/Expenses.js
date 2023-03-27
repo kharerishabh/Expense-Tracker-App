@@ -8,10 +8,12 @@ const Expenses = () => {
   const Dummy_Expenses = [];
   const [expenses, setExpenses] = useState(Dummy_Expenses);
 
+  const email = localStorage.getItem('email')
+  console.log(email)
   const fetchExpenses = async () => {
     try {
       const res = await fetch(
-        `https://expense-tracker-app-34f7d-default-rtdb.firebaseio.com/Expenses.json`,
+        `https://expense-tracker-app-34f7d-default-rtdb.firebaseio.com/${email}/Expenses.json`,
         {
           method: "GET",
           headers: {
@@ -47,7 +49,7 @@ const Expenses = () => {
     };
     try {
       const res = await fetch(
-        `https://expense-tracker-app-34f7d-default-rtdb.firebaseio.com/Expenses.json`,
+        `https://expense-tracker-app-34f7d-default-rtdb.firebaseio.com/${email}/Expenses.json`,
         {
           method: "Post",
           headers: {
