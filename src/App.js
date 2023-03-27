@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Route, Switch } from "react-router-dom";
 import Login from "./components/auth/Login";
 import Header from "./components/Layout/Header";
+import Expenses from "./pages/Expenses";
 import ForgotPassword from "./pages/ForgotPassword";
 import Profile from "./pages/Profile";
 import Welcome from "./pages/Welcome";
@@ -12,11 +13,14 @@ function App() {
   return (
     <>
     <Header />
+    {!authCtx.isLoggedIn && <Login />}
       <Switch>
         <Route path="/home" exact>
           {authCtx.isLoggedIn && <Welcome/>}
-          {!authCtx.isLoggedIn && <Login />}
         </Route>
+        {authCtx.isLoggedIn && <Route path='/expenses'>
+          <Expenses/>
+        </Route>}
         {authCtx.isLoggedIn && <Route path="/profile">
           <Profile />
         </Route>}
