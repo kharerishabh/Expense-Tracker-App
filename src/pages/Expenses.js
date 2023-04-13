@@ -37,9 +37,11 @@ const Expenses = () => {
       alert(err.message);
     }
   };
+
   useEffect(() => {
     fetchExpenses()
   },[])
+  
   const addExpenseHandler = async (event) => {
     event.preventDefault();
     const obj = {
