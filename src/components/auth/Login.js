@@ -1,12 +1,13 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useHistory } from "react-router-dom";
-import AuthContext from "../../store/auth-context";
 import classes from "./Login.module.css";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authActions } from "../../store/auth-slice";
 
 const Login = () => {
+  const dispatch = useDispatch()
   const history = useHistory();
-  const authCtx = useContext(AuthContext);
   const emailInputRef = useRef("");
   const passwordInputRef = useRef("");
   const conPasswordInputRef = useRef("");
@@ -14,7 +15,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const switchAuthModeHandler = () => {
-    setIsLogin((prevState) => !prevState);
+    setIsLogin(prev => !prev)
   };
 
   const submitHandler = async (event) => {
@@ -28,17 +29,17 @@ const Login = () => {
       }
     }
     setIsLoading(true);
-    let url1;
+    let url;
     if (isLogin) {
-      url1 =
+      url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAeVuAP3AC60M5s9NgCzw8jFbPj8zKgv_E";
     } else {
-      url1 =
+      url =
         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAeVuAP3AC60M5s9NgCzw8jFbPj8zKgv_E";
     }
 
     try {
-      const res = await fetch(url1, {
+      const res = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
           email: enteredEmail,
@@ -50,12 +51,13 @@ const Login = () => {
         },
       });
       if (res.ok) {
-        setIsLogin(true);
+         setIsLogin(true);
         const data = await res.json();
         const userEmailId = data.email;
         const replaceEmailId = userEmailId.replace("@", "").replace(".", "");
-        authCtx.login(data.idToken);
+        dispatch(authActions.login({email: replaceEmailId, token: data.idToken}))
         localStorage.setItem("email", replaceEmailId);
+        localStorage.setItem('token', data.idToken)
         console.log(replaceEmailId);
         console.log(data.idToken);
         emailInputRef.current.value = "";

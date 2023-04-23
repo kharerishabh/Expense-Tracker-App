@@ -60,7 +60,7 @@ const Profile = () => {
             nameInputRef.current.value = data.users[0].displayName;
             photoInputRef.current.value = data.users[0].photoUrl;
         }
-        console.log(data);
+        // console.log(data);
       } catch (err) {
         alert(err.message);
       }
