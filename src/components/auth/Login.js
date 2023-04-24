@@ -58,18 +58,18 @@ const Login = () => {
         dispatch(authActions.login({email: replaceEmailId, token: data.idToken}))
         localStorage.setItem("email", replaceEmailId);
         localStorage.setItem('token', data.idToken)
-        console.log(replaceEmailId);
-        console.log(data.idToken);
+        // console.log(replaceEmailId);
+        // console.log(data.idToken);
         emailInputRef.current.value = "";
         passwordInputRef.current.value = "";
 
         if (!isLogin) {
           conPasswordInputRef.current.value = "";
           alert("Signup successful");
-          history.replace("/home");
+          history.replace("/");
         } else {
           alert("Login Successful");
-          history.replace("/home");
+          history.replace("/expenses");
         }
       } else {
         setIsLoading(false)
